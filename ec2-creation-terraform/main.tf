@@ -5,6 +5,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # storing state file to remote backend 
+  backend "s3" {
+    bucket = "terraform-state-bucket-6363"
+    key = "terraform.tfstate"
+    region = "us-east-1"
+    dynamodb_table = "terraform-state-bucket"
+    
+  }
 }
 
 provider "aws" {
@@ -62,7 +71,36 @@ resource "aws_key_pair" "my_key" {
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
+# resource "aws_instance" "my_instance" {
+#   # count = 2
+#   # for_each = tomap({
+#   #   TWS-micro = "t3.micro"
+#   #   TWS-small = "t3.small"
+#   # })
+
+#   depends_on = [ aws_security_group.default_sg ]
+#   ami                         = "ami-0360c520857e3138f"
+#   instance_type               = each.value
+#   subnet_id                   = element(data.aws_subnets.default.ids, 0)
+#   vpc_security_group_ids      = [aws_security_group.default_sg.id]
+#   key_name                    = aws_key_pair.my_key.key_name
+#   associate_public_ip_address = true
+#   user_data                   = file("install_nginx.sh")
+
+#   root_block_device {
+#     volume_size = var.env == "dev" ? var.ec2_root_storage_size : 10
+#   }
+
+
+
+
+#   tags = {
+#     Name = each.key
+#   }
+# }
+
 resource "aws_instance" "my_instance" {
+  depends_on = [ aws_security_group.default_sg ]
   ami                         = "ami-0360c520857e3138f"
   instance_type               = var.ec2_instance_type
   subnet_id                   = element(data.aws_subnets.default.ids, 0)
@@ -71,8 +109,12 @@ resource "aws_instance" "my_instance" {
   associate_public_ip_address = true
   user_data                   = file("install_nginx.sh")
 
+  root_block_device {
+    volume_size = var.env == "dev" ? var.ec2_root_storage_size : 10
+    volume_type = "gp3"
+  }
+
   tags = {
-    Name = "terraform-ec2"
+    Name = "TWS-server"
   }
 }
-
