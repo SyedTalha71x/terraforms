@@ -110,11 +110,12 @@ resource "aws_instance" "my_instance" {
   user_data                   = file("install_nginx.sh")
 
   root_block_device {
-    volume_size = var.env == "dev" ? var.ec2_root_storage_size : 10
+    volume_size = var.env == "default" ? var.ec2_root_storage_size : 10
     volume_type = "gp3"
   }
 
   tags = {
-    Name = "TWS-server"
+    Name = "TWS-server-default"
+    Enviornment = var.env
   }
 }

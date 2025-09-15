@@ -4,7 +4,7 @@ variable "ec2_instance_type" {
 }
 
 variable "env" {
-  default = "dev"
+  default = "default"
 }
 
 variable "ec2_root_storage_size" {
