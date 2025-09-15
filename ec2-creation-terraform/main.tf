@@ -7,13 +7,13 @@ terraform {
   }
 
   # storing state file to remote backend 
-  backend "s3" {
-    bucket = "terraform-state-bucket-6363"
-    key = "terraform.tfstate"
-    region = "us-east-1"
-    dynamodb_table = "terraform-state-bucket"
+  # backend "s3" {
+  #   bucket = "terraform-state-bucket-6363"
+  #   key = "terraform.tfstate"
+  #   region = "us-east-1"
+  #   dynamodb_table = "terraform-state-bucket"
     
-  }
+  # }
 }
 
 provider "aws" {
@@ -115,6 +115,7 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = "TWS-server"
+    Name = "TWS-server-dev"
+    Enviornment = var.env
   }
 }

@@ -8,6 +8,6 @@ variable "env" {
 }
 
 variable "ec2_root_storage_size" {
-  default = 8
+  default = 12
   type    = number
 }
