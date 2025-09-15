@@ -115,7 +115,7 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = "TWS-server"
+    Name = "TWS-server-prod"
     Enviornment = var.env
   }
 }
